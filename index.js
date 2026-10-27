@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from "cors";
-import { MongoClient, ServerApiVersion } from 'mongodb';
+import { MongoClient, ObjectId, ServerApiVersion } from 'mongodb';
  import 'dotenv/config'
 const app = express();
 const port =process.env.PORT|| 5000;
@@ -46,11 +46,18 @@ app.post("/add-destinations",async (req, res) => {
     const result = await destinationCollection.insertOne(data);
     res.send(result)
 })
-// data-get
+// alldata-get
 app.get("/destinations", async(req, res) => {
   const cursor = destinationCollection.find();
   const allData = await cursor.toArray();
   res.send(allData)
+})
+// detailsData
+app.get("/destination/:id", async(req, res) => {
+  const { id } =  req.params;
+  const query = { _id: new ObjectId(id) };
+  const result = await destinationCollection.findOne(query);
+  res.send(result)
 })
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
