@@ -59,6 +59,16 @@ app.get("/destination/:id", async(req, res) => {
   const result = await destinationCollection.findOne(query);
   res.send(result)
 })
+
+// updateData
+app.patch("/destination/:id", async(req, res) => {
+  const { id } = req.params;
+  const data = req.body;
+  const query = { _id: new ObjectId(id), };
+  const result = await destinationCollection.updateOne(query, { $set: data })
+  res.send(result)
+
+})
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
